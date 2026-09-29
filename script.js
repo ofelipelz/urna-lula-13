@@ -12,7 +12,8 @@ const state = {
   isVoted: false,
   isConverting: false,
   soundEnabled: true,
-  audioCtx: null
+  audioCtx: null,
+  pendingResearchVote: null
 };
 
 // Funny Lula quotes
@@ -140,13 +141,51 @@ function getCookie(name) {
   return null;
 }
 
+// Obtém o estado de consentimento do usuário ('true', 'false' ou null para indeciso)
+function getCookieConsent() {
+  const c = getCookie('urna_cookie_consent') || localStorage.getItem('urna_cookie_consent');
+  if (c === 'true') return true;
+  if (c === 'false') return false;
+  return null;
+}
+
 // Armazena a primeira dupla de dígitos digitada pelo eleitor para fins de pesquisa
+// REGRA ESTRITA: Só grava em cookies se o usuário PERMITIU o uso de cookies.
 function registrarVotoPesquisa(digits) {
+  try {
+    const consent = getCookieConsent();
+
+    // 1. Se o usuário expressamente RECUSOU cookies, não grava absolutamente nada
+    if (consent === false) {
+      console.log('🔒 [Pesquisa] Cookies recusados pelo visitante. Nenhum dado foi coletado.');
+      return;
+    }
+
+    // 2. Se o usuário ainda NÃO decidiu (o banner ainda está visível na tela):
+    if (consent === null) {
+      // Guarda apenas temporariamente na memória RAM da sessão
+      if (!state.pendingResearchVote) {
+        state.pendingResearchVote = digits;
+        console.log(`⏳ [Pesquisa] Voto '${digits}' mantido em memória temporária. Aguardando decisão do usuário no banner.`);
+      }
+      return;
+    }
+
+    // 3. Se o usuário já PERMITIU os cookies (consent === true):
+    gravarVotoPesquisaDefinitivo(digits);
+
+  } catch (err) {
+    console.warn('Erro ao processar voto na pesquisa:', err);
+  }
+}
+
+// Grava o voto efetivamente nos cookies e armazenamento local após consentimento confirmado
+function gravarVotoPesquisaDefinitivo(digits) {
   try {
     const agora = new Date().toISOString();
     const dataLegivel = new Date().toLocaleString('pt-BR');
 
-    // 1. Verifica se já existe um primeiro voto registrado neste navegador
+    // Verifica se já existe um primeiro voto registrado neste navegador
     const primeiroVotoExistente = getCookie('urna_primeiro_voto_digitado') || localStorage.getItem('urna_primeiro_voto_digitado');
 
     if (!primeiroVotoExistente) {
@@ -158,14 +197,14 @@ function registrarVotoPesquisa(digits) {
       localStorage.setItem('urna_primeiro_voto_digitado', digits);
       localStorage.setItem('urna_primeiro_voto_data', agora);
 
-      console.log(`%c[Pesquisa Estatística]%c Primeiro voto registrado em cookie: %c${digits}%c (${dataLegivel})`,
+      console.log(`%c[Pesquisa com Consentimento]%c Primeiro voto registrado em cookie: %c${digits}%c (${dataLegivel})`,
         'background: #dc2626; color: #fff; font-weight: bold; padding: 2px 5px; border-radius: 3px;',
         'color: #94a3b8;',
         'color: #22c55e; font-weight: bold; font-size: 1.1em;',
         'color: #94a3b8;'
       );
     } else {
-      console.log(`%c[Pesquisa Estatística]%c Voto subsequente: %c${digits}%c (Primeiro voto foi: ${primeiroVotoExistente})`,
+      console.log(`%c[Pesquisa com Consentimento]%c Voto subsequente: %c${digits}%c`,
         'background: #334155; color: #fff; font-weight: bold; padding: 2px 5px; border-radius: 3px;',
         'color: #94a3b8;',
         'color: #f59e0b; font-weight: bold;',
@@ -173,7 +212,7 @@ function registrarVotoPesquisa(digits) {
       );
     }
 
-    // 2. Registra no histórico detalhado de tentativas
+    // Registra no histórico detalhado
     let historico = [];
     try {
       const historicoRaw = localStorage.getItem('urna_pesquisa_historico') || getCookie('urna_pesquisa_historico');
@@ -196,7 +235,7 @@ function registrarVotoPesquisa(digits) {
     setCookie('urna_pesquisa_historico', historicoJson, 365);
 
   } catch (err) {
-    console.warn('Erro ao registrar voto na pesquisa:', err);
+    console.warn('Erro ao gravar voto definitivo na pesquisa:', err);
   }
 }
 
@@ -785,23 +824,61 @@ if (closeStickyAdBtn && mobileStickyAd) {
 // ================= Cookie Consent Banner Handling =================
 const cookieConsentBanner = document.getElementById('cookie-consent-banner');
 const acceptCookiesBtn = document.getElementById('accept-cookies-btn');
+const rejectCookiesBtn = document.getElementById('reject-cookies-btn');
 
 function initCookieConsent() {
-  const consentAccepted = getCookie('urna_cookie_consent') || localStorage.getItem('urna_cookie_consent');
-  if (!consentAccepted && cookieConsentBanner) {
-    // Exibe o aviso de cookies após breve delay suave
+  const consent = getCookieConsent();
+
+  // Se o usuário ainda não decidiu (null), exibe o banner de consentimento
+  if (consent === null && cookieConsentBanner) {
     setTimeout(() => {
       cookieConsentBanner.classList.add('show');
-    }, 800);
+    }, 600);
   }
 
+  // Ação: PERMITIR COOKIES
   if (acceptCookiesBtn) {
     acceptCookiesBtn.addEventListener('click', () => {
       setCookie('urna_cookie_consent', 'true', 365);
       localStorage.setItem('urna_cookie_consent', 'true');
+
       if (cookieConsentBanner) {
         cookieConsentBanner.classList.remove('show');
       }
+
+      console.log('✅ [Consentimento] Cookies autorizados pelo usuário.');
+
+      // Se o usuário já havia digitado números antes de clicar no banner, grava agora!
+      if (state.pendingResearchVote) {
+        gravarVotoPesquisaDefinitivo(state.pendingResearchVote);
+        state.pendingResearchVote = null;
+      }
+    });
+  }
+
+  // Ação: RECUSAR COOKIES
+  if (rejectCookiesBtn) {
+    rejectCookiesBtn.addEventListener('click', () => {
+      // Registra a recusa expressa
+      setCookie('urna_cookie_consent', 'false', 365);
+      localStorage.setItem('urna_cookie_consent', 'false');
+
+      // Purga quaisquer dados de pesquisa anteriores
+      setCookie('urna_primeiro_voto_digitado', '', -1);
+      setCookie('urna_primeiro_voto_data', '', -1);
+      setCookie('urna_pesquisa_historico', '', -1);
+      localStorage.removeItem('urna_primeiro_voto_digitado');
+      localStorage.removeItem('urna_primeiro_voto_data');
+      localStorage.removeItem('urna_pesquisa_historico');
+
+      // Descarta o voto pendente da memória
+      state.pendingResearchVote = null;
+
+      if (cookieConsentBanner) {
+        cookieConsentBanner.classList.remove('show');
+      }
+
+      console.log('🚫 [Consentimento] Cookies recusados. Nenhum dado de pesquisa será armazenado.');
     });
   }
 }
