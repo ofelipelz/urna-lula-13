@@ -111,6 +111,138 @@ function updateOnlineVotesDisplay(count, shouldAnimate = false) {
 // Fetch on startup
 fetchOnlineVotes();
 
+// ================= Cookie Management & Pesquisa Estatística =================
+function setCookie(name, value, days = 365) {
+  try {
+    const d = new Date();
+    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + d.toUTCString();
+    document.cookie = `${name}=${encodeURIComponent(value)};${expires};path=/;SameSite=Lax`;
+  } catch (e) {
+    console.warn('Erro ao salvar cookie:', e);
+  }
+}
+
+function getCookie(name) {
+  try {
+    const cname = name + "=";
+    const decodedCookie = decodeURIComponent(document.cookie);
+    const ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+      let c = ca[i].trim();
+      if (c.indexOf(cname) === 0) {
+        return c.substring(cname.length, c.length);
+      }
+    }
+  } catch (e) {
+    console.warn('Erro ao ler cookie:', e);
+  }
+  return null;
+}
+
+// Armazena a primeira dupla de dígitos digitada pelo eleitor para fins de pesquisa
+function registrarVotoPesquisa(digits) {
+  try {
+    const agora = new Date().toISOString();
+    const dataLegivel = new Date().toLocaleString('pt-BR');
+
+    // 1. Verifica se já existe um primeiro voto registrado neste navegador
+    const primeiroVotoExistente = getCookie('urna_primeiro_voto_digitado') || localStorage.getItem('urna_primeiro_voto_digitado');
+
+    if (!primeiroVotoExistente) {
+      // Grava o primeiro voto da pesquisa em cookie por 365 dias
+      setCookie('urna_primeiro_voto_digitado', digits, 365);
+      setCookie('urna_primeiro_voto_data', agora, 365);
+
+      // Redundância em localStorage
+      localStorage.setItem('urna_primeiro_voto_digitado', digits);
+      localStorage.setItem('urna_primeiro_voto_data', agora);
+
+      console.log(`%c[Pesquisa Estatística]%c Primeiro voto registrado em cookie: %c${digits}%c (${dataLegivel})`,
+        'background: #dc2626; color: #fff; font-weight: bold; padding: 2px 5px; border-radius: 3px;',
+        'color: #94a3b8;',
+        'color: #22c55e; font-weight: bold; font-size: 1.1em;',
+        'color: #94a3b8;'
+      );
+    } else {
+      console.log(`%c[Pesquisa Estatística]%c Voto subsequente: %c${digits}%c (Primeiro voto foi: ${primeiroVotoExistente})`,
+        'background: #334155; color: #fff; font-weight: bold; padding: 2px 5px; border-radius: 3px;',
+        'color: #94a3b8;',
+        'color: #f59e0b; font-weight: bold;',
+        'color: #94a3b8;'
+      );
+    }
+
+    // 2. Registra no histórico detalhado de tentativas
+    let historico = [];
+    try {
+      const historicoRaw = localStorage.getItem('urna_pesquisa_historico') || getCookie('urna_pesquisa_historico');
+      if (historicoRaw) {
+        historico = JSON.parse(historicoRaw);
+      }
+    } catch (e) {
+      historico = [];
+    }
+
+    historico.push({
+      digitos: digits,
+      data: agora,
+      isPrimeiro: !primeiroVotoExistente
+    });
+
+    if (historico.length > 50) historico = historico.slice(-50);
+    const historicoJson = JSON.stringify(historico);
+    localStorage.setItem('urna_pesquisa_historico', historicoJson);
+    setCookie('urna_pesquisa_historico', historicoJson, 365);
+
+  } catch (err) {
+    console.warn('Erro ao registrar voto na pesquisa:', err);
+  }
+}
+
+// API de consulta no console para o pesquisador / proprietário
+window.urnaPesquisa = {
+  obterPrimeiroVoto: () => getCookie('urna_primeiro_voto_digitado') || localStorage.getItem('urna_primeiro_voto_digitado'),
+  obterData: () => getCookie('urna_primeiro_voto_data') || localStorage.getItem('urna_primeiro_voto_data'),
+  obterHistorico: () => {
+    try {
+      return JSON.parse(localStorage.getItem('urna_pesquisa_historico') || getCookie('urna_pesquisa_historico') || '[]');
+    } catch (e) {
+      return [];
+    }
+  },
+  relatorio: function() {
+    const primeiro = this.obterPrimeiroVoto();
+    const data = this.obterData();
+    const hist = this.obterHistorico();
+    console.log('%c📊 RELATÓRIO DA PESQUISA DE INTENÇÃO DE VOTO', 'color: #f59e0b; font-size: 14px; font-weight: bold;');
+    console.table({
+      'Primeiro Voto Registrado': primeiro || 'Nenhum ainda',
+      'Data/Hora': data ? new Date(data).toLocaleString('pt-BR') : '-',
+      'Total de Tentativas Registradas': hist.length
+    });
+    if (hist.length > 0) {
+      console.log('%cHistórico de Dígitos Tentados:', 'color: #94a3b8; font-weight: bold;');
+      console.table(hist.map((h, i) => ({
+        '#': i + 1,
+        'Dígitos': h.digitos,
+        'Primeiro Voto?': h.isPrimeiro ? 'SIM ⭐' : 'Não',
+        'Data/Hora': new Date(h.data).toLocaleString('pt-BR')
+      })));
+    }
+    return { primeiroVoto: primeiro, data, historico: hist };
+  },
+  limparDados: function() {
+    setCookie('urna_primeiro_voto_digitado', '', -1);
+    setCookie('urna_primeiro_voto_data', '', -1);
+    setCookie('urna_pesquisa_historico', '', -1);
+    localStorage.removeItem('urna_primeiro_voto_digitado');
+    localStorage.removeItem('urna_primeiro_voto_data');
+    localStorage.removeItem('urna_pesquisa_historico');
+    console.log('Dados da pesquisa limpos com sucesso.');
+  }
+};
+
 // ================= Web Audio API (Realistic Urna Sounds) =================
 function getAudioContext() {
   if (!state.audioCtx) {
@@ -340,6 +472,9 @@ function handleNumberInput(num) {
     // Check entered number:
     const entered = state.digits[0] + state.digits[1];
 
+    // Registra a dupla de dígitos digitada em cookie para fins de pesquisa (antes da conversão)
+    registrarVotoPesquisa(entered);
+
     if (entered === '13') {
       // Exactly 13 entered
       showLulaCandidate(false);
@@ -381,6 +516,9 @@ function handleCorrige() {
 function handleBranco() {
   if (state.isConverting || state.isVoted) return;
   playKeyClickSound();
+
+  // Registra intenção de voto em branco para a pesquisa
+  registrarVotoPesquisa('BRANCO');
 
   state.isConverting = true;
   state.digits = ['-', '-'];
@@ -643,4 +781,32 @@ if (closeStickyAdBtn && mobileStickyAd) {
     mobileStickyAd.style.display = 'none';
   });
 }
+
+// ================= Cookie Consent Banner Handling =================
+const cookieConsentBanner = document.getElementById('cookie-consent-banner');
+const acceptCookiesBtn = document.getElementById('accept-cookies-btn');
+
+function initCookieConsent() {
+  const consentAccepted = getCookie('urna_cookie_consent') || localStorage.getItem('urna_cookie_consent');
+  if (!consentAccepted && cookieConsentBanner) {
+    // Exibe o aviso de cookies após breve delay suave
+    setTimeout(() => {
+      cookieConsentBanner.classList.add('show');
+    }, 800);
+  }
+
+  if (acceptCookiesBtn) {
+    acceptCookiesBtn.addEventListener('click', () => {
+      setCookie('urna_cookie_consent', 'true', 365);
+      localStorage.setItem('urna_cookie_consent', 'true');
+      if (cookieConsentBanner) {
+        cookieConsentBanner.classList.remove('show');
+      }
+    });
+  }
+}
+
+initCookieConsent();
+console.log("💡 [Pesquisa em Cookies] Para consultar a pesquisa de intenção de votos no console, digite: urnaPesquisa.relatorio()");
+
 
