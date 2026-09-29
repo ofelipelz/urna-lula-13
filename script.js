@@ -46,6 +46,71 @@ const viewVoting = document.getElementById('view-voting');
 const viewGravando = document.getElementById('view-gravando');
 const viewFim = document.getElementById('view-fim');
 
+// Online Counter Elements
+const onlineVotesCountEl = document.getElementById('online-votes-count');
+const onlineVotesBadge = document.getElementById('online-votes-badge');
+const fimVoteNumberEl = document.getElementById('fim-vote-number');
+
+// ================= Online Votes Counter (Cloud API) =================
+const COUNT_API_BASE = 'https://countapi.mileshilliard.com/api/v1';
+const COUNT_KEY = 'urna_lula_13_ofelipelz';
+let totalOnlineVotes = 13;
+
+async function fetchOnlineVotes() {
+  try {
+    const res = await fetch(`${COUNT_API_BASE}/get/${COUNT_KEY}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && typeof data.value === 'number') {
+        totalOnlineVotes = data.value;
+        updateOnlineVotesDisplay(totalOnlineVotes);
+        return;
+      }
+    }
+  } catch (err) {
+    console.warn('Contador offline, usando cache local:', err);
+  }
+  const saved = localStorage.getItem('urna_votes_count');
+  if (saved) {
+    totalOnlineVotes = parseInt(saved, 10);
+  }
+  updateOnlineVotesDisplay(totalOnlineVotes);
+}
+
+async function recordOnlineVote() {
+  let newTotal = totalOnlineVotes + 1;
+  try {
+    const res = await fetch(`${COUNT_API_BASE}/hit/${COUNT_KEY}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && typeof data.value === 'number') {
+        newTotal = data.value;
+      }
+    }
+  } catch (err) {
+    console.warn('Erro ao registrar voto online, salvando localmente:', err);
+  }
+  totalOnlineVotes = newTotal;
+  localStorage.setItem('urna_votes_count', newTotal.toString());
+  updateOnlineVotesDisplay(newTotal, true);
+  if (fimVoteNumberEl) {
+    fimVoteNumberEl.textContent = newTotal.toLocaleString('pt-BR');
+  }
+}
+
+function updateOnlineVotesDisplay(count, shouldAnimate = false) {
+  if (onlineVotesCountEl) {
+    onlineVotesCountEl.textContent = count.toLocaleString('pt-BR');
+  }
+  if (shouldAnimate && onlineVotesBadge) {
+    onlineVotesBadge.classList.add('bump');
+    setTimeout(() => onlineVotesBadge.classList.remove('bump'), 600);
+  }
+}
+
+// Fetch on startup
+fetchOnlineVotes();
+
 // ================= Web Audio API (Realistic Urna Sounds) =================
 function getAudioContext() {
   if (!state.audioCtx) {
@@ -370,6 +435,9 @@ function handleConfirma() {
   // Vote is ready to be confirmed!
   state.isVoted = true;
   playKeyClickSound();
+  
+  // Computar voto online na nuvem
+  recordOnlineVote();
 
   // Show "GRAVANDO..." screen
   viewVoting.classList.remove('active');

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -19,7 +19,12 @@
         <span class="sub-badge">SIMULADOR 2D OFICIAL (OU QUASE)</span>
       </div>
       <div class="top-hints">
-        <span class="hint-pill">💡 Use o mouse ou o teclado numérico</span>
+        <div class="online-votes-badge" id="online-votes-badge" title="Votos confirmados online em tempo real">
+          <span class="live-dot"></span>
+          <span class="live-label">Votos Confirmados:</span>
+          <strong id="online-votes-count">...</strong>
+        </div>
+        <span class="hint-pill">💡 Use teclado ou botões</span>
         <button id="toggle-sound-btn" class="sound-toggle-btn" title="Ligar/Desligar Som">🔊 Som: Ligado</button>
       </div>
     </header>
@@ -143,6 +148,23 @@
                 <h1 class="fim-title">FIM</h1>
                 <div class="fim-badge">VOTOU! 🌟</div>
                 <p class="fim-msg">Num vai comer picanha, Faz o L! 👆</p>
+
+                <!-- Apuração Online -->
+                <div class="fim-online-box">
+                  <div class="fim-vote-tally">
+                    🗳️ Voto nº <strong id="fim-vote-number">#...</strong> registrado no Brasil
+                  </div>
+                  <div class="apuracao-mini">
+                    <div class="apuracao-labels">
+                      <span class="pt-label">⭐ LULA: 100%</span>
+                      <span class="outros-label">OUTROS: 0%</span>
+                    </div>
+                    <div class="apuracao-bar">
+                      <div class="apuracao-fill"></div>
+                    </div>
+                  </div>
+                </div>
+
                 <button id="restart-btn" class="restart-btn">🗳️ Votar Novamente</button>
               </div>
               <div class="fim-voto-label">VOTO GRAVADO COM SUCESSO</div>
