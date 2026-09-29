@@ -37,3 +37,20 @@ Depois acesse `http://localhost:8000`.
 - **Enter**: Tecla **CONFIRMA** (ou reiniciar após o FIM).
 - **Backspace / Esc / C**: Tecla **CORRIGE**.
 - **Espaço / B**: Tecla **BRANCO**.
+
+## 🌐 Acesso Online (GitHub Pages)
+O projeto está publicado e funcional em:
+👉 **[ofelipelz.github.io/urna-lula-13/](https://ofelipelz.github.io/urna-lula-13/)**
+
+## 💰 Monetização & Google AdSense
+O projeto já está com estrutura 100% pronta para aprovação e exibição de anúncios do Google AdSense:
+- **Arranha-céus Laterais (Desktop)**: Posicionados nas laterais da urna em telas largas com 100% de visibilidade.
+- **Banner Flutuante Sticky (Mobile)**: Barra fixa inferior com botão de fechar para smartphones.
+- **Banner Leaderboard & In-Article**: Distribuídos no conteúdo informativo pós-urna.
+- **Banner Pós-Voto**: Exibido após o eleitor confirmar o voto na tela FIM.
+- **Conformidade Legal**: Páginas de [Política de Privacidade](privacidade.html) e [Termos de Uso](termos.html).
+- **Autorização ads.txt**: Arquivo [`ads.txt`](ads.txt) pré-configurado na raiz.
+
+Consulte o passo a passo completo em:
+📘 **[ADSENSE_GUIA.md](ADSENSE_GUIA.md)** para vincular seu domínio próprio e ativar as tags.
+

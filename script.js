@@ -633,3 +633,14 @@ function stopConfetti() {
 // Initial initialization
 updateScreenDigits();
 console.log("Simulador de Urna Eletrônica iniciado com sucesso!");
+
+// ================= Mobile Sticky Ad Dismiss =================
+const closeStickyAdBtn = document.getElementById('close-sticky-ad');
+const mobileStickyAd = document.getElementById('mobile-sticky-ad');
+
+if (closeStickyAdBtn && mobileStickyAd) {
+  closeStickyAdBtn.addEventListener('click', () => {
+    mobileStickyAd.style.display = 'none';
+  });
+}
+

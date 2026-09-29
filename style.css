@@ -57,6 +57,13 @@ body {
   max-width: 980px;
   position: relative;
   z-index: 1;
+  transition: max-width 0.3s ease;
+}
+
+@media (min-width: 1360px) {
+  .main-wrapper {
+    max-width: 1360px;
+  }
 }
 
 /* ================= First Screen (Urna Viewport) ================= */
@@ -112,6 +119,7 @@ body {
 /* ================= Top Bar ================= */
 .top-bar {
   width: 100%;
+  max-width: 980px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -218,10 +226,100 @@ body {
   background: #475569;
 }
 
+/* ================= Urna Stage & Skyscrapers Wrapper ================= */
+.urna-stage-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 1.5rem;
+  position: relative;
+}
+
+/* Skyscraper Ads (Desktop >= 1360px) */
+.ad-skyscraper {
+  display: none;
+}
+
+@media (min-width: 1360px) {
+  .ad-skyscraper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 160px;
+    height: 600px;
+    flex-shrink: 0;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px dashed rgba(255, 255, 255, 0.18);
+    border-radius: 14px;
+    padding: 0.65rem 0.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  }
+}
+
+.ad-micro-label {
+  font-size: 0.58rem;
+  color: #64748b;
+  letter-spacing: 1px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+  display: block;
+  text-align: center;
+}
+
+.ad-slot-box {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ad-mock-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-align: center;
+  color: #94a3b8;
+  padding: 1rem 0.5rem;
+  height: 100%;
+}
+
+.ad-mock-icon {
+  font-size: 2.2rem;
+}
+
+.ad-mock-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.ad-mock-sub {
+  font-size: 0.68rem;
+  color: #64748b;
+}
+
+.ad-mock-badge {
+  font-size: 0.62rem;
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  padding: 0.2rem 0.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
 /* ================= Urna Cabinet Casing ================= */
 .urna-casing {
   display: flex;
   width: 100%;
+  max-width: 980px;
   background: linear-gradient(145deg, #e5e7eb, #d1d5db);
   border-radius: 20px;
   padding: 1.75rem;
@@ -782,6 +880,35 @@ body {
   to { width: 100%; }
 }
 
+/* FIM Screen Post-Vote Ad */
+.fim-ad-wrapper {
+  width: 100%;
+  max-width: 290px;
+  margin: 0.3rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fim-ad-slot {
+  width: 100%;
+  min-height: 48px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px dashed #cbd5e1;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.5rem;
+}
+
+.fim-ad-placeholder {
+  font-size: 0.68rem;
+  color: #64748b;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
 .restart-btn {
   margin-top: 0.5rem;
   background: var(--pt-red);
@@ -989,27 +1116,47 @@ body {
   z-index: 999;
 }
 
-/* ================= AdSense Container ================= */
+/* ================= AdSense Container (Leaderboard) ================= */
 .ad-container-wrap {
   width: 100%;
+  max-width: 860px;
   margin: 3rem 0 1rem;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
-.ad-placeholder {
+.ad-placeholder-banner {
   width: 100%;
   max-width: 728px;
-  min-height: 80px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px dashed rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
+  min-height: 90px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #475569;
+  padding: 0.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.ad-banner-mock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+.ad-banner-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #cbd5e1;
+}
+
+.ad-banner-sub {
   font-size: 0.7rem;
-  letter-spacing: 0.5px;
+  color: #64748b;
 }
 
 /* ================= Article & Content (AdSense Policy) ================= */
@@ -1069,6 +1216,53 @@ body {
   font-size: 0.76rem;
   color: #475569;
   line-height: 1.5;
+}
+
+/* In-Article Ad Slot */
+.in-article-ad-wrap {
+  width: 100%;
+  margin: 1.25rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.in-article-slot {
+  width: 100%;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.in-article-mock {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #475569;
+}
+
+.in-article-icon {
+  font-size: 1.6rem;
+}
+
+.in-article-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.in-article-text strong {
+  font-size: 0.82rem;
+  color: #1e293b;
+}
+
+.in-article-text small {
+  font-size: 0.72rem;
+  color: #64748b;
 }
 
 /* FAQ */
@@ -1225,3 +1419,86 @@ body {
     height: 140px;
   }
 }
+
+/* ================= Mobile Sticky Anchor Ad ================= */
+.mobile-sticky-ad {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .mobile-sticky-ad {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9998;
+    background: rgba(15, 23, 42, 0.96);
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(12px);
+    padding: 0.35rem 0.75rem 0.5rem;
+    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.45);
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .mobile-sticky-inner {
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+  }
+
+  .mobile-sticky-top-bar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .mobile-sticky-label {
+    font-size: 0.58rem;
+    color: #64748b;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+  }
+
+  .mobile-sticky-close {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #94a3b8;
+    border-radius: 4px;
+    font-size: 0.65rem;
+    padding: 0.12rem 0.45rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .mobile-sticky-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+  }
+
+  .mobile-sticky-content {
+    width: 100%;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .mobile-ad-mock {
+    font-size: 0.72rem;
+    color: #94a3b8;
+    font-weight: 600;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px dashed rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    padding: 0.45rem;
+    width: 100%;
+    max-width: 320px;
+  }
+}
+

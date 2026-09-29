@@ -8,6 +8,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@400;600;700;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- ===================================================================
+       GOOGLE ADSENSE - CÓDIGO DO CABEÇALHO (AUTO ADS / ADSENSE SCRIPT)
+       Quando você registrar e aprovar o seu domínio no Google AdSense:
+       1. Descomente a tag <script> abaixo.
+       2. Substitua 'ca-pub-SEU_PUB_ID_AQUI' pelo seu ID de Editor AdSense.
+       =================================================================== -->
+  <!--
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-SEU_PUB_ID_AQUI"
+       crossorigin="anonymous"></script>
+  -->
 </head>
 <body>
   <div class="main-wrapper">
@@ -31,8 +42,32 @@
       </div>
     </header>
 
-    <!-- Urna Eletrônica Cabinet -->
-    <main class="urna-casing" id="urna-casing">
+    <!-- Wrapper com Urna e Arranha-céus Laterais (Desktop >= 1340px) -->
+    <div class="urna-stage-wrapper">
+
+      <!-- Skyscraper Esquerdo (160x600) -->
+      <aside class="ad-skyscraper ad-skyscraper-left" aria-label="Anúncio Lateral Esquerdo">
+        <span class="ad-micro-label">PUBLICIDADE</span>
+        <div class="ad-slot-box">
+          <!-- Bloco AdSense Arranha-céu Esquerdo (160x600) -->
+          <!--
+          <ins class="adsbygoogle"
+               style="display:inline-block;width:160px;height:600px"
+               data-ad-client="ca-pub-SEU_PUB_ID_AQUI"
+               data-ad-slot="SLOT_SKYSCRAPER_ESQUERDO"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+          -->
+          <div class="ad-mock-slot">
+            <span class="ad-mock-icon">📢</span>
+            <span class="ad-mock-title">Espaço 160×600</span>
+            <span class="ad-mock-sub">Arranha-céu Esquerdo</span>
+            <span class="ad-mock-badge">100% Visível no Desktop</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Urna Eletrônica Cabinet -->
+      <main class="urna-casing" id="urna-casing">
       <!-- Left side: The Electoral Screen -->
       <section class="screen-section">
         <div class="screen-frame">
@@ -167,6 +202,26 @@
                   </div>
                 </div>
 
+                <!-- Mini banner pós-voto na tela FIM -->
+                <div class="fim-ad-wrapper">
+                  <span class="ad-micro-label">PUBLICIDADE</span>
+                  <div class="fim-ad-slot">
+                    <!-- Bloco AdSense Pós-Voto FIM (Responsivo / 320x100) -->
+                    <!--
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-SEU_PUB_ID_AQUI"
+                         data-ad-slot="SLOT_FIM_ID"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+                    -->
+                    <div class="fim-ad-placeholder">
+                      <span>⭐ Espaço Publicitário Pós-Voto ⭐</span>
+                    </div>
+                  </div>
+                </div>
+
                 <button id="restart-btn" class="restart-btn">🗳️ Votar Novamente</button>
               </div>
               <div class="fim-voto-label">VOTO GRAVADO COM SUCESSO</div>
@@ -216,6 +271,29 @@
       </section>
     </main>
 
+      <!-- Skyscraper Direito (160x600) -->
+      <aside class="ad-skyscraper ad-skyscraper-right" aria-label="Anúncio Lateral Direito">
+        <span class="ad-micro-label">PUBLICIDADE</span>
+        <div class="ad-slot-box">
+          <!-- Bloco AdSense Arranha-céu Direito (160x600) -->
+          <!--
+          <ins class="adsbygoogle"
+               style="display:inline-block;width:160px;height:600px"
+               data-ad-client="ca-pub-SEU_PUB_ID_AQUI"
+               data-ad-slot="SLOT_SKYSCRAPER_DIREITO"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+          -->
+          <div class="ad-mock-slot">
+            <span class="ad-mock-icon">📢</span>
+            <span class="ad-mock-title">Espaço 160×600</span>
+            <span class="ad-mock-sub">Arranha-céu Direito</span>
+            <span class="ad-mock-badge">100% Visível no Desktop</span>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
     <!-- Scroll down indicator -->
     <a href="#ad-container-top" class="scroll-down-hint">
       <span class="scroll-text">Role para baixo para saber mais</span>
@@ -226,10 +304,24 @@
     <!-- Confetti Canvas for celebration -->
     <canvas id="confetti-canvas"></canvas>
 
-    <!-- Ad Space Container (Ready for Google AdSense) -->
+    <!-- Ad Space Container (Leaderboard Responsivo 728x90 / 320x100) -->
     <section class="ad-container-wrap" id="ad-container-top">
-      <div class="ad-placeholder">
-        <span class="ad-notice">Espaço reservado para publicidade</span>
+      <span class="ad-micro-label">PUBLICIDADE</span>
+      <div class="ad-placeholder-banner">
+        <!-- Bloco AdSense Leaderboard Topo (728x90 ou responsivo) -->
+        <!--
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-SEU_PUB_ID_AQUI"
+             data-ad-slot="SLOT_LEADERBOARD_ID"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        -->
+        <div class="ad-banner-mock">
+          <span class="ad-banner-title">Espaço Leaderboard (728×90 / Responsivo)</span>
+          <span class="ad-banner-sub">Monetização ativada após conectar o domínio</span>
+        </div>
       </div>
     </section>
 
@@ -259,6 +351,29 @@
         <div class="article-card">
           <h3>🔒 Segurança e Privacidade</h3>
           <p>O simulador não coleta nenhuma informação pessoal, documento ou dado sensível dos visitantes. Apenas uma contagem anônima é incrementada globalmente para fins estatísticos de entretenimento. O projeto é de código aberto e transparente.</p>
+        </div>
+      </div>
+
+      <!-- Bloco de Anúncio AdSense In-Article (Fluido e Integrado ao Conteúdo) -->
+      <div class="in-article-ad-wrap">
+        <span class="ad-micro-label">PUBLICIDADE RECOMENDADA</span>
+        <div class="in-article-slot">
+          <!--
+          <ins class="adsbygoogle"
+               style="display:block; text-align:center;"
+               data-ad-layout="in-article"
+               data-ad-format="fluid"
+               data-ad-client="ca-pub-SEU_PUB_ID_AQUI"
+               data-ad-slot="SLOT_IN_ARTICLE_ID"></ins>
+          <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+          -->
+          <div class="in-article-mock">
+            <span class="in-article-icon">📰</span>
+            <div class="in-article-text">
+              <strong>Espaço Publicitário In-Article</strong>
+              <small>Anúncio contextualizado durante a leitura do conteúdo histórico</small>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -301,6 +416,29 @@
       </div>
     </footer>
   </div>
+
+  <!-- Mobile Sticky Anchor Ad (Flutuante fixo no rodapé para smartphones) -->
+  <aside class="mobile-sticky-ad" id="mobile-sticky-ad" aria-label="Publicidade Móvel Flutuante">
+    <div class="mobile-sticky-inner">
+      <div class="mobile-sticky-top-bar">
+        <span class="mobile-sticky-label">PUBLICIDADE</span>
+        <button class="mobile-sticky-close" id="close-sticky-ad" title="Fechar anúncio" aria-label="Fechar anúncio">✕ Fechar</button>
+      </div>
+      <div class="mobile-sticky-content">
+        <!-- Bloco AdSense Anchor Banner Mobile (320x50 / Responsivo) -->
+        <!--
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:320px;height:50px"
+             data-ad-client="ca-pub-SEU_PUB_ID_AQUI"
+             data-ad-slot="SLOT_STICKY_MOBILE_ID"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+        -->
+        <div class="mobile-ad-mock">
+          <span>📱 Anúncio Mobile Flutuante (100% Visível)</span>
+        </div>
+      </div>
+    </div>
+  </aside>
 
   <script src="script.js"></script>
 </body>

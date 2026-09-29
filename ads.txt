@@ -1,0 +1,10 @@
+# ==============================================================================
+# Google AdSense ads.txt
+# 
+# INSTRUÇÕES DE ATIVAÇÃO:
+# 1. Quando sua conta do Google AdSense for aprovada com seu domínio personalizado,
+#    acesse o painel do AdSense > Sites e copie seu código ads.txt.
+# 2. Substitua o valor "pub-0000000000000000" abaixo pelo seu ID de editor real
+#    (o número que vem após ca-pub- ou pub-).
+# ==============================================================================
+google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
