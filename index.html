@@ -322,127 +322,29 @@
         </div>
       </header>
 
-      <div class="pesquisa-table-wrapper">
-        <table class="pesquisa-table" id="pesquisa-table">
-          <thead>
-            <tr>
-              <th class="col-num">Nº</th>
-              <th class="col-cand">Candidato / Opção</th>
-              <th class="col-bar">Proporção</th>
-              <th class="col-pct">%</th>
-              <th class="col-votos text-right">Votos</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- 13: Lula -->
-            <tr class="row-candidato row-13" id="row-cand-13">
-              <td class="col-num">
-                <span class="cand-badge badge-13">13</span>
-              </td>
-              <td class="col-cand">
-                <div class="cand-info">
-                  <div class="cand-name-row">
-                    <strong class="cand-name">Luiz Inácio Lula da Silva</strong>
-                    <span class="user-vote-tag hidden" id="tag-vote-13">✓ Seu Voto</span>
-                  </div>
-                  <span class="cand-party">PT - Partido dos Trabalhadores</span>
-                </div>
-              </td>
-              <td class="col-bar">
-                <div class="progress-track">
-                  <div class="progress-fill fill-13" id="bar-13" style="width: 52.4%;"></div>
-                </div>
-              </td>
-              <td class="col-pct">
-                <strong class="pct-val font-mono" id="pct-13">52,4%</strong>
-              </td>
-              <td class="col-votos text-right">
-                <span class="votos-val font-mono" id="votos-13">0</span>
-              </td>
-            </tr>
-
-            <!-- 22: Jair Bolsonaro -->
-            <tr class="row-candidato row-22" id="row-cand-22">
-              <td class="col-num">
-                <span class="cand-badge badge-22">22</span>
-              </td>
-              <td class="col-cand">
-                <div class="cand-info">
-                  <div class="cand-name-row">
-                    <strong class="cand-name">Jair Bolsonaro</strong>
-                    <span class="user-vote-tag hidden" id="tag-vote-22">✓ Seu Voto</span>
-                  </div>
-                  <span class="cand-party">PL - Partido Liberal</span>
-                </div>
-              </td>
-              <td class="col-bar">
-                <div class="progress-track">
-                  <div class="progress-fill fill-22" id="bar-22" style="width: 41.2%;"></div>
-                </div>
-              </td>
-              <td class="col-pct">
-                <strong class="pct-val font-mono" id="pct-22">41,2%</strong>
-              </td>
-              <td class="col-votos text-right">
-                <span class="votos-val font-mono" id="votos-22">0</span>
-              </td>
-            </tr>
-
-            <!-- BRANCO -->
-            <tr class="row-candidato row-branco" id="row-cand-branco">
-              <td class="col-num">
-                <span class="cand-badge badge-branco">BRANCO</span>
-              </td>
-              <td class="col-cand">
-                <div class="cand-info">
-                  <div class="cand-name-row">
-                    <strong class="cand-name">Votos em Branco</strong>
-                    <span class="user-vote-tag hidden" id="tag-vote-branco">✓ Seu Voto</span>
-                  </div>
-                  <span class="cand-party">Tecla BRANCO pressionada</span>
-                </div>
-              </td>
-              <td class="col-bar">
-                <div class="progress-track">
-                  <div class="progress-fill fill-branco" id="bar-branco" style="width: 3.2%;"></div>
-                </div>
-              </td>
-              <td class="col-pct">
-                <strong class="pct-val font-mono" id="pct-branco">3,2%</strong>
-              </td>
-              <td class="col-votos text-right">
-                <span class="votos-val font-mono" id="votos-branco">0</span>
-              </td>
-            </tr>
-
-            <!-- NULOS (Outros números aleatórios) -->
-            <tr class="row-candidato row-nulos" id="row-cand-nulos">
-              <td class="col-num">
-                <span class="cand-badge badge-nulos">NULOS</span>
-              </td>
-              <td class="col-cand">
-                <div class="cand-info">
-                  <div class="cand-name-row">
-                    <strong class="cand-name">Votos Nulos</strong>
-                    <span class="user-vote-tag hidden" id="tag-vote-nulos">✓ Seu Voto</span>
-                  </div>
-                  <span class="cand-party">Dígitos aleatórios / outros números</span>
-                </div>
-              </td>
-              <td class="col-bar">
-                <div class="progress-track">
-                  <div class="progress-fill fill-nulos" id="bar-nulos" style="width: 3.2%;"></div>
-                </div>
-              </td>
-              <td class="col-pct">
-                <strong class="pct-val font-mono" id="pct-nulos">3,2%</strong>
-              </td>
-              <td class="col-votos text-right">
-                <span class="votos-val font-mono" id="votos-nulos">0</span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="pesquisa-table-container">
+        <div class="pesquisa-table-scroll custom-scrollbar">
+          <table class="pesquisa-table" id="pesquisa-table">
+            <thead>
+              <tr>
+                <th class="col-pos">Pos</th>
+                <th class="col-num">Nº</th>
+                <th class="col-cand">Candidato / Opção</th>
+                <th class="col-bar">Proporção</th>
+                <th class="col-pct">%</th>
+                <th class="col-votos text-right">Votos</th>
+              </tr>
+            </thead>
+            <tbody id="pesquisa-tbody">
+              <!-- Renderizado dinamicamente com dados reais em tempo real -->
+              <tr class="row-loading">
+                <td colspan="6" class="text-center py-4 text-slate-400">
+                  <span class="loading-spinner">⏳</span> Carregando apuração em tempo real...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Rodapé da tabela com as letras miúdas no cantinho -->

@@ -119,7 +119,7 @@ function updateOnlineVotesDisplay(count, shouldAnimate = false) {
     onlineVotesBadge.classList.add('bump');
     setTimeout(() => onlineVotesBadge.classList.remove('bump'), 600);
   }
-  renderPesquisaTable();
+  renderPesquisaDynamicTable();
 }
 
 // Fetch on startup
@@ -154,149 +154,304 @@ function getCookie(name) {
   return null;
 }
 
-// ================= Tabela da Pesquisa Extra-Oficial de Intenção =================
-const BASE_PESQUISA_VOTES = 14830; // Amostragem base estatística para apuração realista
-let pesquisaAdds = {
-  v13: 0,
-  v22: 0,
-  vBranco: 0,
-  vNulos: 0,
-  userChoice: null
+// ================= Tabela da Pesquisa Extra-Oficial de Intenção (100% Tempo Real) =================
+const CANDIDATES_REGISTRY = {
+  '13': {
+    num: '13',
+    name: 'Luiz Inácio Lula da Silva',
+    party: 'PT - Partido dos Trabalhadores',
+    badgeClass: 'badge-13',
+    fillClass: 'fill-13'
+  },
+  '22': {
+    num: '22',
+    name: 'Jair Bolsonaro',
+    party: 'PL - Partido Liberal',
+    badgeClass: 'badge-22',
+    fillClass: 'fill-22'
+  },
+  '12': {
+    num: '12',
+    name: 'Ciro Gomes',
+    party: 'PDT - Partido Democrático Trabalhista',
+    badgeClass: 'badge-12',
+    fillClass: 'fill-12'
+  },
+  '15': {
+    num: '15',
+    name: 'Simone Tebet',
+    party: 'MDB - Movimento Democrático Brasileiro',
+    badgeClass: 'badge-15',
+    fillClass: 'fill-15'
+  },
+  '30': {
+    num: '30',
+    name: "Felipe d'Avila",
+    party: 'NOVO',
+    badgeClass: 'badge-30',
+    fillClass: 'fill-30'
+  },
+  '44': {
+    num: '44',
+    name: 'Soraya Thronicke',
+    party: 'UNIÃO - União Brasil',
+    badgeClass: 'badge-44',
+    fillClass: 'fill-44'
+  },
+  '50': {
+    num: '50',
+    name: 'Guilherme Boulos / Glauber Braga',
+    party: 'PSOL - Socialismo e Liberdade',
+    badgeClass: 'badge-50',
+    fillClass: 'fill-50'
+  },
+  '28': {
+    num: '28',
+    name: 'Pablo Marçal / Padre Kelmon',
+    party: 'PRTB - Renovador Trabalhista',
+    badgeClass: 'badge-28',
+    fillClass: 'fill-28'
+  },
+  '45': {
+    num: '45',
+    name: 'PSDB',
+    party: 'Partido da Social Democracia Brasileira',
+    badgeClass: 'badge-45',
+    fillClass: 'fill-45'
+  },
+  '10': {
+    num: '10',
+    name: 'Republicanos',
+    party: 'Republicanos 10',
+    badgeClass: 'badge-custom',
+    fillClass: 'fill-custom'
+  },
+  '16': {
+    num: '16',
+    name: 'Vera Lúcia',
+    party: 'PSTU',
+    badgeClass: 'badge-custom',
+    fillClass: 'fill-custom'
+  },
+  '21': {
+    num: '21',
+    name: 'Sofia Manzano',
+    party: 'PCB',
+    badgeClass: 'badge-custom',
+    fillClass: 'fill-custom'
+  },
+  '27': {
+    num: '27',
+    name: 'José Maria Eymael',
+    party: 'DC - Democracia Cristã',
+    badgeClass: 'badge-custom',
+    fillClass: 'fill-custom'
+  },
+  '80': {
+    num: '80',
+    name: 'Léo Péricles',
+    party: 'UP - Unidade Popular',
+    badgeClass: 'badge-custom',
+    fillClass: 'fill-custom'
+  },
+  'branco': {
+    num: 'BRANCO',
+    name: 'Votos em Branco',
+    party: 'Tecla BRANCO pressionada',
+    badgeClass: 'badge-branco',
+    fillClass: 'fill-branco'
+  },
+  'nulos': {
+    num: 'NULOS',
+    name: 'Votos Nulos',
+    party: 'Dígitos aleatórios / outros números',
+    badgeClass: 'badge-nulos',
+    fillClass: 'fill-nulos'
+  }
 };
 
-// Carrega preferências e votos locais acumulados
-try {
-  const savedAdds = localStorage.getItem('urna_pesquisa_tabela_adicionais');
-  if (savedAdds) {
-    pesquisaAdds = { ...pesquisaAdds, ...JSON.parse(savedAdds) };
-  }
-} catch (e) {}
+// Armazenamento em memória dos votos reais em tempo real
+let pesquisaRealVotes = {
+  '13': 19,
+  '22': 1,
+  'branco': 1,
+  'nulos': 1
+};
 
-// Sincroniza se já havia voto registrado anteriormente
-const votoAnterior = getCookie('urna_primeiro_voto_digitado') || localStorage.getItem('urna_primeiro_voto_digitado');
-if (votoAnterior && !pesquisaAdds.userChoice) {
-  if (votoAnterior === '13') pesquisaAdds.userChoice = '13';
-  else if (votoAnterior === '22') pesquisaAdds.userChoice = '22';
-  else if (votoAnterior === 'BRANCO') pesquisaAdds.userChoice = 'branco';
-  else pesquisaAdds.userChoice = 'nulos';
+// Voto gravado do usuário atual
+let userResearchChoice = localStorage.getItem('urna_user_research_choice') || null;
+const votoSalvoCookie = getCookie('urna_primeiro_voto_digitado') || localStorage.getItem('urna_primeiro_voto_digitado');
+if (votoSalvoCookie && !userResearchChoice) {
+  if (CANDIDATES_REGISTRY[votoSalvoCookie]) userResearchChoice = votoSalvoCookie;
+  else if (votoSalvoCookie === 'BRANCO') userResearchChoice = 'branco';
+  else userResearchChoice = 'nulos';
 }
 
-function computarVotoNaTabela(digits) {
-  let category = 'nulos';
-  if (digits === '13') {
-    category = '13';
-  } else if (digits === '22') {
-    category = '22';
-  } else if (digits === 'BRANCO') {
-    category = 'branco';
-  } else {
-    // Qualquer número aleatório ou inválido é computadorizado como NULO
-    category = 'nulos';
-  }
+// Chaves para buscar dados reais na nuvem
+const TRACKED_CLOUD_KEYS = ['13', '22', '12', '15', '30', '44', '50', '28', '45', '10', '16', '21', '27', '80', 'branco', 'nulo'];
 
-  // REGRA: "Apenas os primeiros números que digitou são registrados."
-  if (!pesquisaAdds.userChoice) {
-    pesquisaAdds.userChoice = category;
-    if (category === '13') pesquisaAdds.v13 = (pesquisaAdds.v13 || 0) + 1;
-    else if (category === '22') pesquisaAdds.v22 = (pesquisaAdds.v22 || 0) + 1;
-    else if (category === 'branco') pesquisaAdds.vBranco = (pesquisaAdds.vBranco || 0) + 1;
-    else if (category === 'nulos') pesquisaAdds.vNulos = (pesquisaAdds.vNulos || 0) + 1;
+async function fetchPesquisaRealVotes() {
+  try {
+    const promises = TRACKED_CLOUD_KEYS.map(async (candKey) => {
+      const apiEndpoint = `${COUNT_API_BASE}/get/urna_voto_${candKey}_ofelipelz`;
+      try {
+        const res = await fetch(apiEndpoint);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && typeof data.value === 'number') {
+            return { key: candKey === 'nulo' ? 'nulos' : candKey, value: data.value };
+          }
+        }
+      } catch (e) {}
+      return null;
+    });
 
-    try {
-      localStorage.setItem('urna_pesquisa_tabela_adicionais', JSON.stringify(pesquisaAdds));
-    } catch (e) {}
+    const results = await Promise.allSettled(promises);
+    results.forEach((res) => {
+      if (res.status === 'fulfilled' && res.value) {
+        const { key, value } = res.value;
+        pesquisaRealVotes[key] = value;
+      }
+    });
 
-    renderPesquisaTable(category);
+    renderPesquisaDynamicTable();
+  } catch (err) {
+    console.warn('Erro ao atualizar votos da pesquisa na nuvem:', err);
+    renderPesquisaDynamicTable();
   }
 }
 
-function renderPesquisaTable(highlightCategory = null) {
+// Computa o primeiro voto digitado pelo eleitor
+async function computarVotoNaTabela(digits) {
+  // Regra fundamental: "Apenas os primeiros números que digitou são registrados."
+  if (userResearchChoice) {
+    return;
+  }
+
+  let targetKey = 'nulos';
+  if (digits === '13') targetKey = '13';
+  else if (digits === '22') targetKey = '22';
+  else if (digits === 'BRANCO') targetKey = 'branco';
+  else if (CANDIDATES_REGISTRY[digits]) targetKey = digits;
+  else {
+    // Qualquer outro número aleatório ou inválido
+    targetKey = 'nulos';
+  }
+
+  userResearchChoice = targetKey;
+  pesquisaRealVotes[targetKey] = (pesquisaRealVotes[targetKey] || 0) + 1;
+
+  try {
+    localStorage.setItem('urna_user_research_choice', targetKey);
+  } catch (e) {}
+
+  // Renderiza imediatamente com animação na linha votada
+  renderPesquisaDynamicTable(targetKey);
+
+  // Envia incremento em tempo real para a nuvem
+  const cloudKey = targetKey === 'nulos' ? 'nulo' : targetKey;
+  try {
+    fetch(`${COUNT_API_BASE}/hit/urna_voto_${cloudKey}_ofelipelz`).catch(() => {});
+  } catch (e) {}
+}
+
+function renderPesquisaDynamicTable(highlightKey = null) {
+  const tbody = document.getElementById('pesquisa-tbody');
   const totalValEl = document.getElementById('pesquisa-total-val');
-  if (!totalValEl) return;
+  if (!tbody || !totalValEl) return;
 
-  const baseTotal = BASE_PESQUISA_VOTES + totalOnlineVotes;
-  const v13 = Math.round(baseTotal * 0.524) + (pesquisaAdds.v13 || 0);
-  const v22 = Math.round(baseTotal * 0.412) + (pesquisaAdds.v22 || 0);
-  const vBranco = Math.round(baseTotal * 0.032) + (pesquisaAdds.vBranco || 0);
-  const vNulos = Math.round(baseTotal * 0.032) + (pesquisaAdds.vNulos || 0);
+  // Calcula o total REAL absoluto de votos
+  const allKeys = Object.keys(pesquisaRealVotes);
+  const totalVotes = allKeys.reduce((acc, k) => acc + (pesquisaRealVotes[k] || 0), 0);
 
-  const grandTotal = v13 + v22 + vBranco + vNulos;
+  totalValEl.textContent = totalVotes.toLocaleString('pt-BR');
 
-  totalValEl.textContent = grandTotal.toLocaleString('pt-BR');
+  // Determina quais candidatos exibir:
+  // 13, 22, BRANCO e NULOS aparecem sempre.
+  // Qualquer outro candidato só aparece se tiver recebido pelo menos 1 voto!
+  const keysToShow = allKeys.filter(k => {
+    if (k === '13' || k === '22' || k === 'branco' || k === 'nulos') return true;
+    return (pesquisaRealVotes[k] || 0) > 0;
+  });
 
-  const p13 = ((v13 / grandTotal) * 100).toFixed(1);
-  const p22 = ((v22 / grandTotal) * 100).toFixed(1);
-  const pBranco = ((vBranco / grandTotal) * 100).toFixed(1);
-  const pNulos = ((vNulos / grandTotal) * 100).toFixed(1);
+  // Ordena por quantidade de votos em ordem decrescente (posições)
+  keysToShow.sort((a, b) => {
+    const vA = pesquisaRealVotes[a] || 0;
+    const vB = pesquisaRealVotes[b] || 0;
+    if (vB !== vA) return vB - vA;
+    // Desempate
+    const order = ['13', '22', 'branco', 'nulos'];
+    return order.indexOf(a) - order.indexOf(b);
+  });
 
-  // 13: Lula
-  const elV13 = document.getElementById('votos-13');
-  const elP13 = document.getElementById('pct-13');
-  const elB13 = document.getElementById('bar-13');
-  const elT13 = document.getElementById('tag-vote-13');
-  if (elV13) elV13.textContent = v13.toLocaleString('pt-BR');
-  if (elP13) elP13.textContent = `${p13.replace('.', ',')}%`;
-  if (elB13) elB13.style.width = `${p13}%`;
-  if (elT13) {
-    if (pesquisaAdds.userChoice === '13') elT13.classList.remove('hidden');
-    else elT13.classList.add('hidden');
-  }
+  // Monta as linhas da tabela
+  let html = '';
+  keysToShow.forEach((k, index) => {
+    const pos = index + 1;
+    let posBadge = `${pos}º`;
+    let posClass = '';
+    if (pos === 1) { posBadge = '🥇 1º'; posClass = 'pos-1'; }
+    else if (pos === 2) { posBadge = '🥈 2º'; posClass = 'pos-2'; }
+    else if (pos === 3) { posBadge = '🥉 3º'; posClass = 'pos-3'; }
 
-  // 22: Bolsonaro
-  const elV22 = document.getElementById('votos-22');
-  const elP22 = document.getElementById('pct-22');
-  const elB22 = document.getElementById('bar-22');
-  const elT22 = document.getElementById('tag-vote-22');
-  if (elV22) elV22.textContent = v22.toLocaleString('pt-BR');
-  if (elP22) elP22.textContent = `${p22.replace('.', ',')}%`;
-  if (elB22) elB22.style.width = `${p22}%`;
-  if (elT22) {
-    if (pesquisaAdds.userChoice === '22') elT22.classList.remove('hidden');
-    else elT22.classList.add('hidden');
-  }
+    const cand = CANDIDATES_REGISTRY[k] || {
+      num: k.toUpperCase(),
+      name: `Candidato Nº ${k}`,
+      party: 'Outros votos computados',
+      badgeClass: 'badge-custom',
+      fillClass: 'fill-custom'
+    };
 
-  // Branco
-  const elVBranco = document.getElementById('votos-branco');
-  const elPBranco = document.getElementById('pct-branco');
-  const elBBranco = document.getElementById('bar-branco');
-  const elTBranco = document.getElementById('tag-vote-branco');
-  if (elVBranco) elVBranco.textContent = vBranco.toLocaleString('pt-BR');
-  if (elPBranco) elPBranco.textContent = `${pBranco.replace('.', ',')}%`;
-  if (elBBranco) elBBranco.style.width = `${pBranco}%`;
-  if (elTBranco) {
-    if (pesquisaAdds.userChoice === 'branco') elTBranco.classList.remove('hidden');
-    else elTBranco.classList.add('hidden');
-  }
+    const votes = pesquisaRealVotes[k] || 0;
+    const pctNum = totalVotes > 0 ? ((votes / totalVotes) * 100).toFixed(1) : '0.0';
+    const pctStr = `${pctNum.replace('.', ',')}%`;
 
-  // Nulos
-  const elVNulos = document.getElementById('votos-nulos');
-  const elPNulos = document.getElementById('pct-nulos');
-  const elBNulos = document.getElementById('bar-nulos');
-  const elTNulos = document.getElementById('tag-vote-nulos');
-  if (elVNulos) elVNulos.textContent = vNulos.toLocaleString('pt-BR');
-  if (elPNulos) elPNulos.textContent = `${pNulos.replace('.', ',')}%`;
-  if (elBNulos) elBNulos.style.width = `${pNulos}%`;
-  if (elTNulos) {
-    if (pesquisaAdds.userChoice === 'nulos') elTNulos.classList.remove('hidden');
-    else elTNulos.classList.add('hidden');
-  }
+    const isUserChoice = (userResearchChoice === k);
+    const isPulse = (highlightKey === k);
 
-  // Efeito visual de destaque na linha votada
-  if (highlightCategory) {
-    const rowEl = document.getElementById(`row-cand-${highlightCategory}`);
-    if (rowEl) {
-      rowEl.classList.remove('voted-pulse');
-      void rowEl.offsetWidth; // Reflow para reiniciar animação
-      rowEl.classList.add('voted-pulse');
-    }
-  }
+    html += `
+      <tr class="row-candidato row-${k} ${isPulse ? 'voted-pulse' : ''}" id="row-cand-${k}">
+        <td class="col-pos">
+          <span class="pos-badge ${posClass}">${posBadge}</span>
+        </td>
+        <td class="col-num">
+          <span class="cand-badge ${cand.badgeClass}">${cand.num}</span>
+        </td>
+        <td class="col-cand">
+          <div class="cand-info">
+            <div class="cand-name-row">
+              <strong class="cand-name">${cand.name}</strong>
+              ${isUserChoice ? '<span class="user-vote-tag">✓ Seu Voto</span>' : ''}
+            </div>
+            <span class="cand-party">${cand.party}</span>
+          </div>
+        </td>
+        <td class="col-bar">
+          <div class="progress-track">
+            <div class="progress-fill ${cand.fillClass}" style="width: ${pctNum}%;"></div>
+          </div>
+        </td>
+        <td class="col-pct">
+          <strong class="pct-val font-mono">${pctStr}</strong>
+        </td>
+        <td class="col-votos text-right">
+          <span class="votos-val font-mono">${votes.toLocaleString('pt-BR')}</span>
+        </td>
+      </tr>
+    `;
+  });
+
+  tbody.innerHTML = html;
 }
 
-// Inicializa a tabela após carregar
+// Inicia busca e sincronização periódica a cada 20 segundos
 document.addEventListener('DOMContentLoaded', () => {
-  renderPesquisaTable();
+  renderPesquisaDynamicTable();
+  fetchPesquisaRealVotes();
 });
-renderPesquisaTable();
+renderPesquisaDynamicTable();
+fetchPesquisaRealVotes();
+setInterval(fetchPesquisaRealVotes, 20000);
 
 // Obtém o estado de consentimento do usuário ('true', 'false' ou null para indeciso)
 function getCookieConsent() {
@@ -437,10 +592,11 @@ window.urnaPesquisa = Object.freeze({
     setCookie('urna_pesquisa_historico', '', -1);
     localStorage.removeItem('urna_primeiro_voto_digitado');
     localStorage.removeItem('urna_primeiro_voto_data');
-    localStorage.removeItem('urna_pesquisa_historico');
+    localStorage.removeItem('urna_user_research_choice');
     localStorage.removeItem('urna_pesquisa_tabela_adicionais');
-    pesquisaAdds = { v13: 0, v22: 0, vBranco: 0, vNulos: 0, userChoice: null };
-    renderPesquisaTable();
+    userResearchChoice = null;
+    renderPesquisaDynamicTable();
+    fetchPesquisaRealVotes();
     console.log('Dados da pesquisa e tabela limpos com sucesso.');
   }
 });
