@@ -106,20 +106,19 @@ async function recordOnlineVote() {
   totalOnlineVotes = newTotal;
   localStorage.setItem('urna_votes_count', newTotal.toString());
   updateOnlineVotesDisplay(newTotal, true);
-  if (fimVoteNumberEl) {
-    fimVoteNumberEl.textContent = newTotal.toLocaleString('pt-BR');
-  }
 }
 
 function updateOnlineVotesDisplay(count, shouldAnimate = false) {
   if (onlineVotesCountEl) {
     onlineVotesCountEl.textContent = count.toLocaleString('pt-BR');
   }
+  if (fimVoteNumberEl) {
+    fimVoteNumberEl.textContent = count.toLocaleString('pt-BR');
+  }
   if (shouldAnimate && onlineVotesBadge) {
     onlineVotesBadge.classList.add('bump');
     setTimeout(() => onlineVotesBadge.classList.remove('bump'), 600);
   }
-  renderPesquisaDynamicTable();
 }
 
 // Fetch on startup
@@ -165,94 +164,87 @@ const CANDIDATES_REGISTRY = {
   },
   '22': {
     num: '22',
-    name: 'Jair Bolsonaro',
+    name: 'Flávio Bolsonaro',
     party: 'PL - Partido Liberal',
     badgeClass: 'badge-22',
     fillClass: 'fill-22'
   },
-  '12': {
-    num: '12',
-    name: 'Ciro Gomes',
-    party: 'PDT - Partido Democrático Trabalhista',
-    badgeClass: 'badge-12',
-    fillClass: 'fill-12'
+  '14': {
+    num: '14',
+    name: 'Renan Santos',
+    party: 'Missão',
+    badgeClass: 'badge-14',
+    fillClass: 'fill-14'
   },
-  '15': {
-    num: '15',
-    name: 'Simone Tebet',
-    party: 'MDB - Movimento Democrático Brasileiro',
-    badgeClass: 'badge-15',
-    fillClass: 'fill-15'
+  '55': {
+    num: '55',
+    name: 'Ronaldo Caiado',
+    party: 'PSD - Partido Social Democrático',
+    badgeClass: 'badge-55',
+    fillClass: 'fill-55'
   },
   '30': {
     num: '30',
-    name: "Felipe d'Avila",
+    name: 'Romeu Zema',
     party: 'NOVO',
     badgeClass: 'badge-30',
     fillClass: 'fill-30'
   },
-  '44': {
-    num: '44',
-    name: 'Soraya Thronicke',
-    party: 'UNIÃO - União Brasil',
-    badgeClass: 'badge-44',
-    fillClass: 'fill-44'
-  },
-  '50': {
-    num: '50',
-    name: 'Guilherme Boulos / Glauber Braga',
-    party: 'PSOL - Socialismo e Liberdade',
-    badgeClass: 'badge-50',
-    fillClass: 'fill-50'
+  '70': {
+    num: '70',
+    name: 'Augusto Cury',
+    party: 'Avante',
+    badgeClass: 'badge-70',
+    fillClass: 'fill-70'
   },
   '28': {
     num: '28',
-    name: 'Pablo Marçal / Padre Kelmon',
+    name: 'Pablo Marçal',
     party: 'PRTB - Renovador Trabalhista',
     badgeClass: 'badge-28',
     fillClass: 'fill-28'
   },
-  '45': {
-    num: '45',
-    name: 'PSDB',
-    party: 'Partido da Social Democracia Brasileira',
-    badgeClass: 'badge-45',
-    fillClass: 'fill-45'
-  },
-  '10': {
-    num: '10',
-    name: 'Republicanos',
-    party: 'Republicanos 10',
-    badgeClass: 'badge-custom',
-    fillClass: 'fill-custom'
+  '21': {
+    num: '21',
+    name: 'Edmilson Costa',
+    party: 'PCB - Partido Comunista Brasileiro',
+    badgeClass: 'badge-21',
+    fillClass: 'fill-21'
   },
   '16': {
     num: '16',
-    name: 'Vera Lúcia',
-    party: 'PSTU',
-    badgeClass: 'badge-custom',
-    fillClass: 'fill-custom'
-  },
-  '21': {
-    num: '21',
-    name: 'Sofia Manzano',
-    party: 'PCB',
-    badgeClass: 'badge-custom',
-    fillClass: 'fill-custom'
-  },
-  '27': {
-    num: '27',
-    name: 'José Maria Eymael',
-    party: 'DC - Democracia Cristã',
-    badgeClass: 'badge-custom',
-    fillClass: 'fill-custom'
+    name: 'Hertz Dias',
+    party: 'PSTU - Partido Socialista dos Trabalhadores Unificado',
+    badgeClass: 'badge-16',
+    fillClass: 'fill-16'
   },
   '80': {
     num: '80',
-    name: 'Léo Péricles',
+    name: 'Samara Martins',
     party: 'UP - Unidade Popular',
-    badgeClass: 'badge-custom',
-    fillClass: 'fill-custom'
+    badgeClass: 'badge-80',
+    fillClass: 'fill-80'
+  },
+  '35': {
+    num: '35',
+    name: 'Wilson Grassi',
+    party: 'Democrata',
+    badgeClass: 'badge-35',
+    fillClass: 'fill-35'
+  },
+  '27': {
+    num: '27',
+    name: 'Clariana Barão',
+    party: 'DC - Democracia Cristã',
+    badgeClass: 'badge-27',
+    fillClass: 'fill-27'
+  },
+  '29': {
+    num: '29',
+    name: 'Rui Costa Pimenta',
+    party: 'PCO - Partido da Causa Operária',
+    badgeClass: 'badge-29',
+    fillClass: 'fill-29'
   },
   'branco': {
     num: 'BRANCO',
@@ -273,9 +265,20 @@ const CANDIDATES_REGISTRY = {
 // Armazenamento em memória dos votos reais em tempo real
 let pesquisaRealVotes = {
   '13': 19,
-  '22': 1,
+  '22': 2,
+  '14': 0,
+  '55': 0,
+  '30': 0,
+  '70': 0,
+  '28': 0,
+  '21': 0,
+  '16': 0,
+  '80': 0,
+  '35': 0,
+  '27': 0,
+  '29': 0,
   'branco': 1,
-  'nulos': 1
+  'nulos': 2
 };
 
 // Voto gravado do usuário atual
@@ -291,8 +294,8 @@ try {
   localStorage.removeItem('urna_pesquisa_tabela_adicionais');
 } catch (e) {}
 
-// Chaves para buscar dados reais na nuvem
-const TRACKED_CLOUD_KEYS = ['13', '22', '12', '15', '30', '44', '50', '28', '45', '10', '16', '21', '27', '80', 'branco', 'nulo'];
+// Chaves para buscar dados reais na nuvem (candidatos de 2026 + branco + nulos)
+const TRACKED_CLOUD_KEYS = ['13', '22', '14', '55', '30', '70', '28', '21', '16', '80', '35', '27', '29', 'branco', 'nulo'];
 
 async function fetchPesquisaRealVotes() {
   try {
@@ -318,11 +321,6 @@ async function fetchPesquisaRealVotes() {
       }
     });
 
-    // Sincroniza 13 com as confirmações da urna se maior
-    if (typeof totalOnlineVotes === 'number' && totalOnlineVotes > (pesquisaRealVotes['13'] || 0)) {
-      pesquisaRealVotes['13'] = totalOnlineVotes;
-    }
-
     renderPesquisaDynamicTable();
   } catch (err) {
     console.warn('Erro ao atualizar votos da pesquisa na nuvem:', err);
@@ -338,9 +336,7 @@ async function computarVotoNaTabela(digits) {
   }
 
   let targetKey = 'nulos';
-  if (digits === '13') targetKey = '13';
-  else if (digits === '22') targetKey = '22';
-  else if (digits === 'BRANCO') targetKey = 'branco';
+  if (digits === 'BRANCO') targetKey = 'branco';
   else if (CANDIDATES_REGISTRY[digits]) targetKey = digits;
   else {
     // Qualquer outro número aleatório ou inválido
@@ -369,16 +365,11 @@ function renderPesquisaDynamicTable(highlightKey = null) {
   const totalValEl = document.getElementById('pesquisa-total-val');
   if (!tbody || !totalValEl) return;
 
-  // Calcula o total REAL absoluto de votos
+  // Calcula o total REAL absoluto de votos da pesquisa
   const allKeys = Object.keys(pesquisaRealVotes);
   const totalVotes = allKeys.reduce((acc, k) => acc + (pesquisaRealVotes[k] || 0), 0);
 
   totalValEl.textContent = totalVotes.toLocaleString('pt-BR');
-
-  // Mantém o contador da barra superior perfeitamente sincronizado com o total da apuração
-  if (onlineVotesCountEl) {
-    onlineVotesCountEl.textContent = totalVotes.toLocaleString('pt-BR');
-  }
 
   // Determina quais candidatos exibir:
   // 13, 22, BRANCO e NULOS aparecem sempre.
@@ -395,7 +386,12 @@ function renderPesquisaDynamicTable(highlightKey = null) {
     if (vB !== vA) return vB - vA;
     // Desempate
     const order = ['13', '22', 'branco', 'nulos'];
-    return order.indexOf(a) - order.indexOf(b);
+    const idxA = order.indexOf(a);
+    const idxB = order.indexOf(b);
+    if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+    if (idxA !== -1) return -1;
+    if (idxB !== -1) return 1;
+    return a.localeCompare(b);
   });
 
   // Monta as linhas da tabela
