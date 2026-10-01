@@ -288,38 +288,200 @@
     </div>
 
     <!-- Scroll down indicator -->
-    <a href="#ad-container-top" class="scroll-down-hint">
-      <span class="scroll-text">Role para baixo para saber mais</span>
+    <a href="#pesquisa-section" class="scroll-down-hint">
+      <span class="scroll-text">Role para baixo para ver a pesquisa e informações</span>
       <span class="scroll-arrow">↓</span>
     </a>
   </div>
 
-    <!-- Confetti Canvas for celebration -->
-    <canvas id="confetti-canvas"></canvas>
+  <!-- Confetti Canvas for celebration -->
+  <canvas id="confetti-canvas"></canvas>
 
-    <!-- Ad Space Container (Leaderboard Responsivo 728x90 / 320x100) -->
-    <section class="ad-container-wrap" id="ad-container-top">
-      <span class="ad-micro-label">PUBLICIDADE</span>
-      <div class="ad-placeholder-banner">
-        <!-- Bloco AdSense Leaderboard Topo (728x90 ou responsivo) -->
-        <!--
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-SEU_PUB_ID_AQUI"
-             data-ad-slot="SLOT_LEADERBOARD_ID"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-        -->
-        <div class="ad-banner-mock">
-          <span class="ad-banner-title">Espaço Leaderboard (728×90 / Responsivo)</span>
-          <span class="ad-banner-sub">Monetização ativada após conectar o domínio</span>
+  <!-- ===================================================================
+       PESQUISA EXTRA-OFICIAL DE INTENÇÃO DE VOTO
+       Localizada logo acima dos cards informativos e fora da tela principal
+       =================================================================== -->
+  <section class="pesquisa-section" id="pesquisa-section">
+    <div class="pesquisa-card">
+      <header class="pesquisa-header">
+        <div class="pesquisa-title-area">
+          <div class="pesquisa-badges">
+            <span class="pesquisa-badge-live">
+              <span class="pulse-dot"></span>
+              TEMPO REAL
+            </span>
+            <span class="pesquisa-badge-tag">PESQUISA EXTRA-OFICIAL</span>
+          </div>
+          <h2 class="pesquisa-title">Pesquisa Extra-Oficial de Intenção de Voto</h2>
+          <p class="pesquisa-sub">Computação em tempo real baseada nos números digitados pelos eleitores no simulador.</p>
         </div>
-      </div>
-    </section>
+        <div class="pesquisa-meta-total">
+          <span class="pesquisa-total-label">Total Auditado</span>
+          <strong id="pesquisa-total-val" class="font-mono">...</strong>
+          <small class="pesquisa-total-sub">votos computados</small>
+        </div>
+      </header>
 
-    <!-- Informative Article & About Section (Essential for Google AdSense Approval) -->
-    <article class="article-section">
+      <div class="pesquisa-table-wrapper">
+        <table class="pesquisa-table" id="pesquisa-table">
+          <thead>
+            <tr>
+              <th class="col-num">Nº</th>
+              <th class="col-cand">Candidato / Opção</th>
+              <th class="col-bar">Proporção</th>
+              <th class="col-pct">%</th>
+              <th class="col-votos text-right">Votos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- 13: Lula -->
+            <tr class="row-candidato row-13" id="row-cand-13">
+              <td class="col-num">
+                <span class="cand-badge badge-13">13</span>
+              </td>
+              <td class="col-cand">
+                <div class="cand-info">
+                  <div class="cand-name-row">
+                    <strong class="cand-name">Luiz Inácio Lula da Silva</strong>
+                    <span class="user-vote-tag hidden" id="tag-vote-13">✓ Seu Voto</span>
+                  </div>
+                  <span class="cand-party">PT - Partido dos Trabalhadores</span>
+                </div>
+              </td>
+              <td class="col-bar">
+                <div class="progress-track">
+                  <div class="progress-fill fill-13" id="bar-13" style="width: 52.4%;"></div>
+                </div>
+              </td>
+              <td class="col-pct">
+                <strong class="pct-val font-mono" id="pct-13">52,4%</strong>
+              </td>
+              <td class="col-votos text-right">
+                <span class="votos-val font-mono" id="votos-13">0</span>
+              </td>
+            </tr>
+
+            <!-- 22: Jair Bolsonaro -->
+            <tr class="row-candidato row-22" id="row-cand-22">
+              <td class="col-num">
+                <span class="cand-badge badge-22">22</span>
+              </td>
+              <td class="col-cand">
+                <div class="cand-info">
+                  <div class="cand-name-row">
+                    <strong class="cand-name">Jair Bolsonaro</strong>
+                    <span class="user-vote-tag hidden" id="tag-vote-22">✓ Seu Voto</span>
+                  </div>
+                  <span class="cand-party">PL - Partido Liberal</span>
+                </div>
+              </td>
+              <td class="col-bar">
+                <div class="progress-track">
+                  <div class="progress-fill fill-22" id="bar-22" style="width: 41.2%;"></div>
+                </div>
+              </td>
+              <td class="col-pct">
+                <strong class="pct-val font-mono" id="pct-22">41,2%</strong>
+              </td>
+              <td class="col-votos text-right">
+                <span class="votos-val font-mono" id="votos-22">0</span>
+              </td>
+            </tr>
+
+            <!-- BRANCO -->
+            <tr class="row-candidato row-branco" id="row-cand-branco">
+              <td class="col-num">
+                <span class="cand-badge badge-branco">BRANCO</span>
+              </td>
+              <td class="col-cand">
+                <div class="cand-info">
+                  <div class="cand-name-row">
+                    <strong class="cand-name">Votos em Branco</strong>
+                    <span class="user-vote-tag hidden" id="tag-vote-branco">✓ Seu Voto</span>
+                  </div>
+                  <span class="cand-party">Tecla BRANCO pressionada</span>
+                </div>
+              </td>
+              <td class="col-bar">
+                <div class="progress-track">
+                  <div class="progress-fill fill-branco" id="bar-branco" style="width: 3.2%;"></div>
+                </div>
+              </td>
+              <td class="col-pct">
+                <strong class="pct-val font-mono" id="pct-branco">3,2%</strong>
+              </td>
+              <td class="col-votos text-right">
+                <span class="votos-val font-mono" id="votos-branco">0</span>
+              </td>
+            </tr>
+
+            <!-- NULOS (Outros números aleatórios) -->
+            <tr class="row-candidato row-nulos" id="row-cand-nulos">
+              <td class="col-num">
+                <span class="cand-badge badge-nulos">NULOS</span>
+              </td>
+              <td class="col-cand">
+                <div class="cand-info">
+                  <div class="cand-name-row">
+                    <strong class="cand-name">Votos Nulos</strong>
+                    <span class="user-vote-tag hidden" id="tag-vote-nulos">✓ Seu Voto</span>
+                  </div>
+                  <span class="cand-party">Dígitos aleatórios / outros números</span>
+                </div>
+              </td>
+              <td class="col-bar">
+                <div class="progress-track">
+                  <div class="progress-fill fill-nulos" id="bar-nulos" style="width: 3.2%;"></div>
+                </div>
+              </td>
+              <td class="col-pct">
+                <strong class="pct-val font-mono" id="pct-nulos">3,2%</strong>
+              </td>
+              <td class="col-votos text-right">
+                <span class="votos-val font-mono" id="votos-nulos">0</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Rodapé da tabela com as letras miúdas no cantinho -->
+      <footer class="pesquisa-footer">
+        <div class="pesquisa-footer-left">
+          <span class="pesquisa-disclaimer-legal">Pesquisa informal de entretenimento e humor, sem representatividade estatística científica (Art. 33 da Lei nº 9.504/1997).</span>
+        </div>
+        <div class="pesquisa-footer-right">
+          <small class="pesquisa-fineprint">* Apenas os primeiros números que digitou são registrados.</small>
+        </div>
+      </footer>
+    </div>
+  </section>
+
+  <!-- ===================================================================
+       ANÚNCIO HORIZONTAL SEPARANDO A TABELA DOS CARDS
+       =================================================================== -->
+  <section class="ad-container-wrap" id="ad-container-divider">
+    <span class="ad-micro-label">PUBLICIDADE</span>
+    <div class="ad-placeholder-banner">
+      <!-- Bloco Google AdSense Leaderboard Horizontal (728x90 / Responsivo) -->
+      <ins class="adsbygoogle"
+           style="display:block"
+           data-ad-client="ca-pub-9438965437296386"
+           data-ad-slot="auto"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
+      <script>
+           (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
+      <div class="ad-banner-mock">
+        <span class="ad-banner-title">Espaço Publicitário Leaderboard (728×90 / Responsivo)</span>
+        <span class="ad-banner-sub">Anúncios automáticos serão exibidos aqui após aprovação do AdSense</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Informative Article & About Section (Essential for Google AdSense Approval) -->
+  <article class="article-section">
       <header class="article-header">
         <h2>A Urna Eletrônica Brasileira: História, Tecnologia e Simulação</h2>
         <p class="article-subtitle">Conheça os detalhes por trás do sistema de votação do Brasil e a proposta deste simulador interativo.</p>

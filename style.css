@@ -1117,6 +1117,358 @@ body {
 }
 
 /* ================= AdSense Container (Leaderboard) ================= */
+/* ================= Pesquisa Extra-Oficial de Intenção ================= */
+.pesquisa-section {
+  width: 100%;
+  max-width: 860px;
+  margin: 2rem 0 1rem;
+}
+
+.pesquisa-card {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.pesquisa-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 1.25rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.pesquisa-title-area {
+  flex: 1;
+  min-width: 250px;
+}
+
+.pesquisa-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.pesquisa-badge-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  letter-spacing: 0.5px;
+}
+
+.pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  animation: pulseLive 1.8s infinite;
+}
+
+@keyframes pulseLive {
+  0% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+  70% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+  100% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+}
+
+.pesquisa-badge-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #94a3b8;
+  background: #1e293b;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.pesquisa-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.3px;
+}
+
+.pesquisa-sub {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.pesquisa-meta-total {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 0.6rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 140px;
+}
+
+.pesquisa-total-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: #94a3b8;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+#pesquisa-total-val {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #38bdf8;
+  line-height: 1.2;
+}
+
+.pesquisa-total-sub {
+  font-size: 0.65rem;
+  color: #64748b;
+}
+
+.pesquisa-table-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+.pesquisa-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.82rem;
+}
+
+.pesquisa-table th {
+  color: #64748b;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 700;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #1e293b;
+}
+
+.pesquisa-table td {
+  padding: 0.85rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  vertical-align: middle;
+}
+
+.row-candidato {
+  transition: background-color 0.2s ease;
+}
+
+.row-candidato:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.row-candidato.voted-pulse {
+  animation: rowFlash 1.2s ease-out;
+}
+
+@keyframes rowFlash {
+  0% { background-color: rgba(34, 197, 94, 0.25); }
+  100% { background-color: transparent; }
+}
+
+.cand-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 32px;
+  padding: 0 0.5rem;
+  border-radius: 6px;
+  font-weight: 900;
+  font-family: 'Chivo Mono', monospace;
+  font-size: 0.95rem;
+}
+
+.badge-13 {
+  background: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+}
+
+.badge-22 {
+  background: #2563eb;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+}
+
+.badge-branco {
+  background: #f1f5f9;
+  color: #0f172a;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.badge-nulos {
+  background: #475569;
+  color: #f8fafc;
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.cand-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.cand-name-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cand-name {
+  color: #f1f5f9;
+  font-weight: 700;
+  font-size: 0.88rem;
+}
+
+.cand-party {
+  color: #94a3b8;
+  font-size: 0.72rem;
+}
+
+.user-vote-tag {
+  background: #15803d;
+  color: #bbf7d0;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 0.12rem 0.45rem;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  animation: popIn 0.3s ease-out;
+}
+
+.progress-track {
+  background: #1e293b;
+  height: 10px;
+  border-radius: 9999px;
+  overflow: hidden;
+  width: 100%;
+  min-width: 120px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fill-13 {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+.fill-22 {
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+.fill-branco {
+  background: linear-gradient(90deg, #f8fafc, #cbd5e1);
+}
+
+.fill-nulos {
+  background: linear-gradient(90deg, #64748b, #475569);
+}
+
+.pct-val {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #f8fafc;
+}
+
+.votos-val {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.pesquisa-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid #1e293b;
+}
+
+.pesquisa-footer-left {
+  flex: 1;
+  min-width: 250px;
+}
+
+.pesquisa-disclaimer-legal {
+  font-size: 0.68rem;
+  color: #64748b;
+  line-height: 1.35;
+  display: block;
+}
+
+.pesquisa-footer-right {
+  text-align: right;
+}
+
+.pesquisa-fineprint {
+  font-size: 0.76rem;
+  color: #f59e0b;
+  font-style: italic;
+  font-weight: 600;
+  display: block;
+}
+
+@media (max-width: 680px) {
+  .pesquisa-table th.col-bar,
+  .pesquisa-table td.col-bar {
+    display: none;
+  }
+  .pesquisa-card {
+    padding: 1rem;
+  }
+  .pesquisa-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .pesquisa-meta-total {
+    align-items: flex-start;
+  }
+  .pesquisa-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .pesquisa-footer-right {
+    text-align: left;
+  }
+}
+
 .ad-container-wrap {
   width: 100%;
   max-width: 860px;
