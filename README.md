@@ -38,9 +38,10 @@ Depois acesse `http://localhost:8000`.
 - **Backspace / Esc / C**: Tecla **CORRIGE**.
 - **Espaço / B**: Tecla **BRANCO**.
 
-## 🌐 Acesso Online (GitHub Pages)
-O projeto está publicado e funcional em:
-👉 **[ofelipelz.github.io/urna-lula-13/](https://ofelipelz.github.io/urna-lula-13/)**
+## 🌐 Acesso Online Oficial
+O projeto está publicado e funcional no domínio próprio:
+👉 **[faz-o-l.blog.br](https://faz-o-l.blog.br)**
+*(Acesso alternativo via GitHub Pages: `https://ofelipelz.github.io/urna-lula-13/`)*
 
 ## 💰 Monetização & Google AdSense
 O projeto já está com estrutura 100% pronta para aprovação e exibição de anúncios do Google AdSense:
