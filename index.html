@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simulador de Urna Eletrônica - Edição Democrática 13</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20261001-real">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Chivo+Mono:wght@400;600;700;900&family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -317,7 +317,7 @@
         </div>
         <div class="pesquisa-meta-total">
           <span class="pesquisa-total-label">Total Auditado</span>
-          <strong id="pesquisa-total-val" class="font-mono">...</strong>
+          <strong id="pesquisa-total-val" class="font-mono">22</strong>
           <small class="pesquisa-total-sub">votos computados</small>
         </div>
       </header>
@@ -336,11 +336,77 @@
               </tr>
             </thead>
             <tbody id="pesquisa-tbody">
-              <!-- Renderizado dinamicamente com dados reais em tempo real -->
-              <tr class="row-loading">
-                <td colspan="6" class="text-center py-4 text-slate-400">
-                  <span class="loading-spinner">⏳</span> Carregando apuração em tempo real...
+              <!-- 1º: Lula 13 -->
+              <tr class="row-candidato row-13" id="row-cand-13">
+                <td class="col-pos"><span class="pos-badge pos-1">🥇 1º</span></td>
+                <td class="col-num"><span class="cand-badge badge-13">13</span></td>
+                <td class="col-cand">
+                  <div class="cand-info">
+                    <div class="cand-name-row">
+                      <strong class="cand-name">Luiz Inácio Lula da Silva</strong>
+                    </div>
+                    <span class="cand-party">PT - Partido dos Trabalhadores</span>
+                  </div>
                 </td>
+                <td class="col-bar">
+                  <div class="progress-track"><div class="progress-fill fill-13" style="width: 86.4%;"></div></div>
+                </td>
+                <td class="col-pct"><strong class="pct-val font-mono">86,4%</strong></td>
+                <td class="col-votos text-right"><span class="votos-val font-mono">19</span></td>
+              </tr>
+              <!-- 2º: Bolsonaro 22 -->
+              <tr class="row-candidato row-22" id="row-cand-22">
+                <td class="col-pos"><span class="pos-badge pos-2">🥈 2º</span></td>
+                <td class="col-num"><span class="cand-badge badge-22">22</span></td>
+                <td class="col-cand">
+                  <div class="cand-info">
+                    <div class="cand-name-row">
+                      <strong class="cand-name">Jair Bolsonaro</strong>
+                    </div>
+                    <span class="cand-party">PL - Partido Liberal</span>
+                  </div>
+                </td>
+                <td class="col-bar">
+                  <div class="progress-track"><div class="progress-fill fill-22" style="width: 4.5%;"></div></div>
+                </td>
+                <td class="col-pct"><strong class="pct-val font-mono">4,5%</strong></td>
+                <td class="col-votos text-right"><span class="votos-val font-mono">1</span></td>
+              </tr>
+              <!-- 3º: Branco -->
+              <tr class="row-candidato row-branco" id="row-cand-branco">
+                <td class="col-pos"><span class="pos-badge pos-3">🥉 3º</span></td>
+                <td class="col-num"><span class="cand-badge badge-branco">BRANCO</span></td>
+                <td class="col-cand">
+                  <div class="cand-info">
+                    <div class="cand-name-row">
+                      <strong class="cand-name">Votos em Branco</strong>
+                    </div>
+                    <span class="cand-party">Tecla BRANCO pressionada</span>
+                  </div>
+                </td>
+                <td class="col-bar">
+                  <div class="progress-track"><div class="progress-fill fill-branco" style="width: 4.5%;"></div></div>
+                </td>
+                <td class="col-pct"><strong class="pct-val font-mono">4,5%</strong></td>
+                <td class="col-votos text-right"><span class="votos-val font-mono">1</span></td>
+              </tr>
+              <!-- 4º: Nulos -->
+              <tr class="row-candidato row-nulos" id="row-cand-nulos">
+                <td class="col-pos"><span class="pos-badge">4º</span></td>
+                <td class="col-num"><span class="cand-badge badge-nulos">NULOS</span></td>
+                <td class="col-cand">
+                  <div class="cand-info">
+                    <div class="cand-name-row">
+                      <strong class="cand-name">Votos Nulos</strong>
+                    </div>
+                    <span class="cand-party">Dígitos aleatórios / outros números</span>
+                  </div>
+                </td>
+                <td class="col-bar">
+                  <div class="progress-track"><div class="progress-fill fill-nulos" style="width: 4.5%;"></div></div>
+                </td>
+                <td class="col-pct"><strong class="pct-val font-mono">4,5%</strong></td>
+                <td class="col-votos text-right"><span class="votos-val font-mono">1</span></td>
               </tr>
             </tbody>
           </table>
@@ -527,6 +593,6 @@
     </div>
   </aside>
 
-  <script src="script.js"></script>
+  <script src="script.js?v=20261001-real"></script>
 </body>
 </html>

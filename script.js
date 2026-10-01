@@ -287,6 +287,10 @@ if (votoSalvoCookie && !userResearchChoice) {
   else userResearchChoice = 'nulos';
 }
 
+try {
+  localStorage.removeItem('urna_pesquisa_tabela_adicionais');
+} catch (e) {}
+
 // Chaves para buscar dados reais na nuvem
 const TRACKED_CLOUD_KEYS = ['13', '22', '12', '15', '30', '44', '50', '28', '45', '10', '16', '21', '27', '80', 'branco', 'nulo'];
 
@@ -313,6 +317,11 @@ async function fetchPesquisaRealVotes() {
         pesquisaRealVotes[key] = value;
       }
     });
+
+    // Sincroniza 13 com as confirmações da urna se maior
+    if (typeof totalOnlineVotes === 'number' && totalOnlineVotes > (pesquisaRealVotes['13'] || 0)) {
+      pesquisaRealVotes['13'] = totalOnlineVotes;
+    }
 
     renderPesquisaDynamicTable();
   } catch (err) {
@@ -365,6 +374,11 @@ function renderPesquisaDynamicTable(highlightKey = null) {
   const totalVotes = allKeys.reduce((acc, k) => acc + (pesquisaRealVotes[k] || 0), 0);
 
   totalValEl.textContent = totalVotes.toLocaleString('pt-BR');
+
+  // Mantém o contador da barra superior perfeitamente sincronizado com o total da apuração
+  if (onlineVotesCountEl) {
+    onlineVotesCountEl.textContent = totalVotes.toLocaleString('pt-BR');
+  }
 
   // Determina quais candidatos exibir:
   // 13, 22, BRANCO e NULOS aparecem sempre.
