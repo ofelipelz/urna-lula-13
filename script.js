@@ -5,8 +5,11 @@
  * avançada da urna converte democraticamente para 13 (Lula).
  */
 
-// ================= State Management =================
-const state = {
+(() => {
+  'use strict';
+
+  // ================= State Management =================
+  const state = {
   digits: ['', ''],
   activeBox: 0,
   isVoted: false,
@@ -78,7 +81,16 @@ async function fetchOnlineVotes() {
   updateOnlineVotesDisplay(totalOnlineVotes);
 }
 
+let lastVoteTimestamp = 0;
+const VOTE_COOLDOWN_MS = 2500; // 2.5s cooldown para evitar flood/spam
+
 async function recordOnlineVote() {
+  const now = Date.now();
+  if (now - lastVoteTimestamp < VOTE_COOLDOWN_MS) {
+    return;
+  }
+  lastVoteTimestamp = now;
+
   let newTotal = totalOnlineVotes + 1;
   try {
     const res = await fetch(`${COUNT_API_BASE}/hit/${COUNT_KEY}`);
@@ -239,8 +251,8 @@ function gravarVotoPesquisaDefinitivo(digits) {
   }
 }
 
-// API de consulta no console para o pesquisador / proprietário
-window.urnaPesquisa = {
+// API de consulta no console para o pesquisador / proprietário (Imutável)
+window.urnaPesquisa = Object.freeze({
   obterPrimeiroVoto: () => getCookie('urna_primeiro_voto_digitado') || localStorage.getItem('urna_primeiro_voto_digitado'),
   obterData: () => getCookie('urna_primeiro_voto_data') || localStorage.getItem('urna_primeiro_voto_data'),
   obterHistorico: () => {
@@ -280,7 +292,7 @@ window.urnaPesquisa = {
     localStorage.removeItem('urna_pesquisa_historico');
     console.log('Dados da pesquisa limpos com sucesso.');
   }
-};
+});
 
 // ================= Web Audio API (Realistic Urna Sounds) =================
 function getAudioContext() {
@@ -885,5 +897,8 @@ function initCookieConsent() {
 
 initCookieConsent();
 console.log("💡 [Pesquisa em Cookies] Para consultar a pesquisa de intenção de votos no console, digite: urnaPesquisa.relatorio()");
+
+})();
+
 
 
